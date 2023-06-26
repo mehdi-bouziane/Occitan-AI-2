@@ -230,4 +230,3 @@ export interface Database {
     }
   }
 }
-

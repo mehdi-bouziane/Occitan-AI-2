@@ -3,6 +3,7 @@ import { createServerSupabaseClient } from '@/app/supabase-server';
 
 import Logo from '@/components/icons/Logo';
 import SignOutButton from './SignOutButton';
+import Chat from './Chat';
 
 import s from './Navbar.module.css';
 
@@ -24,9 +25,14 @@ export default async function Navbar() {
               <Logo />
             </Link>
             <nav className="hidden ml-6 space-x-2 lg:block">
+              {user && (
+                <Chat />
+              )}
+
               <Link href="/" className={s.link}>
                 Pricing
               </Link>
+
               {user && (
                 <Link href="/account" className={s.link}>
                   Account
