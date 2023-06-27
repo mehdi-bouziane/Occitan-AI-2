@@ -3,23 +3,23 @@ import React from 'react';
 import { hasCookie, setCookie } from "cookies-next";
 
 const CookieConsent = () => {
-  const [showConsent, setShowConsent] = React.useState<boolean | null>(null);
+  const [showConsent, setShowConsent] = React.useState(true);
 
   React.useEffect(() => {
-    setShowConsent(!hasCookie("localConsent"));
+    setShowConsent(hasCookie("localConsent"));
   }, []);
 
   const acceptCookie = () => {
-    setCookie("localConsent", "true"); // Cookie will expire in 365 days
-    setShowConsent(false);
+    setShowConsent(true);
+    setCookie("localConsent", "true", {});
   };
 
   const declineCookie = () => {
-    setCookie("localConsent", "false"); // Cookie will expire in 365 days
-    setShowConsent(false);
+    setShowConsent(true);
+    setCookie("localConsent", "false", {});
   };
 
-  if (showConsent === null) {
+  if (showConsent) {
     return null;
   }
 
