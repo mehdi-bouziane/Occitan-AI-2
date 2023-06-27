@@ -39,6 +39,9 @@ export async function POST(req: Request) {
               quantity
             }
           ],
+          automatic_tax: {
+            enabled: true,
+          },
           mode: 'subscription',
           allow_promotion_codes: true,
           subscription_data: {
