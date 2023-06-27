@@ -23,6 +23,10 @@ export default async function Chat() {
     }
   }
 
+  if (product === '') {
+    return redirect('/');
+  }
+
   return (
     <>
     <section style={{ height: '92vh' }} className="mb-32 bg-black">

@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { createServerSupabaseClient } from '@/app/supabase-server';
+import { createServerSupabaseClient, getSession, getSubscription, getUserDetails } from '@/app/supabase-server';
 
 import Logo from '@/components/icons/Logo';
 import SignOutButton from './SignOutButton';
@@ -13,6 +13,14 @@ export default async function Navbar() {
     data: { user }
   } = await supabase.auth.getUser();
 
+  const [session, userDetails, subscription] = await Promise.all([
+    getSession(),
+    getUserDetails(),
+    getSubscription()
+  ]);
+
+  console.log(subscription);
+
   return (
     <nav className={s.root}>
       <a href="#skip" className="sr-only focus:not-sr-only">
@@ -25,7 +33,7 @@ export default async function Navbar() {
               <Logo />
             </Link>
             <nav className="hidden ml-6 space-x-2 lg:block">
-              {user && (
+              {user && subscription != null && (
                 <Chat />
               )}
 
