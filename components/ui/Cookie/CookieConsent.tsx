@@ -3,7 +3,7 @@ import React from 'react';
 import { hasCookie, setCookie } from "cookies-next";
 
 const CookieConsent = () => {
-  const [showConsent, setShowConsent] = React.useState(null);
+  const [showConsent, setShowConsent] = React.useState<boolean | null>(null);
 
   React.useEffect(() => {
     setShowConsent(!hasCookie("localConsent"));
