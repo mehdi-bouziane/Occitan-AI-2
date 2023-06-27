@@ -31,9 +31,9 @@ export default async function Chat() {
                 width="100%"
                 height="100%"
                 src={
-                  product === 'Basic' ? "http://162.19.67.123:8000/" :
-                  product === 'Standard' ? "http://url.for.standard/" :
-                  product === 'Premium' ? "http://url.for.premium/" : undefined
+                  product === 'Basic' ? process.env.LINK_IFRAME_BASIC_PRODUCT :
+                  product === 'Standard' ? process.env.LINK_IFRAME_STANDARD_PRODUCT :
+                  product === 'Premium' ? process.env.LINK_IFRAME_PREMIUM_PRODUCT : undefined
                 }
         >
         </iframe>

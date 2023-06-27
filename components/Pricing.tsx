@@ -234,7 +234,7 @@ export default function Pricing({
               >
                 <div className="p-6">
                   <h2 className="text-2xl font-semibold leading-6 text-white">
-                    {product.name === 'Basic' ? product.name + ' - 7 days free' : product.name + ' (Available soon)'}
+                    {product.name === 'Basic' ? 'Freelancer' + ' - 7 days free' : product.name + ' (Available soon)'}
                   </h2>
                   <p className="mt-4 text-zinc-300" style={{whiteSpace: 'pre-line'}}>{product.name === 'Basic' ? basicDescription :
                                                      product.name === 'Standard' ? standardDescription :

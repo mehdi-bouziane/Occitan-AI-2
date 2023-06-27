@@ -1,4 +1,6 @@
+import { Fragment } from 'react';
 import Pricing from '@/components/Pricing';
+import CookieConsent from '@/components/ui/Cookie/CookieConsent'
 import {
   getSession,
   getSubscription,
@@ -13,11 +15,14 @@ export default async function PricingPage() {
   ]);
 
   return (
-    <Pricing
-      session={session}
-      user={session?.user}
-      products={products}
-      subscription={subscription}
-    />
+    <Fragment>
+      <Pricing
+        session={session}
+        user={session?.user}
+        products={products}
+        subscription={subscription}
+      />
+      <CookieConsent/>
+    </Fragment>
   );
 }
