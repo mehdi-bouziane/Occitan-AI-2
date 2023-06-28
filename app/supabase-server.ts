@@ -2,6 +2,7 @@ import { Database } from '@/types_db';
 import { createServerComponentClient } from '@supabase/auth-helpers-nextjs';
 import { cookies } from 'next/headers';
 import { cache } from 'react';
+import * as process from 'process';
 
 export const createServerSupabaseClient = cache(() =>
   createServerComponentClient<Database>({ cookies })
@@ -52,11 +53,13 @@ export async function getSubscription() {
 
 export const getActiveProductsWithPrices = async () => {
   const supabase = createServerSupabaseClient();
+  const isProduction: boolean = process.env.IS_PRODUCTION === 'TRUE';
   const { data, error } = await supabase
     .from('products')
     .select('*, prices(*)')
     .eq('active', true)
     .eq('prices.active', true)
+    .eq('is_prod', isProduction)
     .order('metadata->index')
     .order('unit_amount', { foreignTable: 'prices' });
 
