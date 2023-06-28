@@ -88,6 +88,7 @@ export interface Database {
           image: string | null
           metadata: Json | null
           name: string | null
+          is_prod: boolean
         }
         Insert: {
           active?: boolean | null
@@ -96,6 +97,7 @@ export interface Database {
           image?: string | null
           metadata?: Json | null
           name?: string | null
+          is_prod?: boolean
         }
         Update: {
           active?: boolean | null
@@ -104,6 +106,7 @@ export interface Database {
           image?: string | null
           metadata?: Json | null
           name?: string | null
+          is_prod?: boolean
         }
         Relationships: []
       }

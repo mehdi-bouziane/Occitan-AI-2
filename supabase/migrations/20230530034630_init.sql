@@ -60,7 +60,9 @@ create table products (
   -- A URL of the product image in Stripe, meant to be displayable to the customer.
   image text,
   -- Set of key-value pairs, used to store additional information about the object in a structured format.
-  metadata jsonb
+  metadata jsonb,
+
+  is_prod boolean
 );
 alter table products enable row level security;
 create policy "Allow public read-only access." on products for select using (true);
