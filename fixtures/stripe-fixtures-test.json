@@ -1,0 +1,124 @@
+{
+  "_meta": {
+    "template_version": 0
+  },
+  "fixtures": [
+    {
+      "name": "prod_lite",
+      "path": "/v1/products",
+      "method": "post",
+      "params": {
+        "name": "Lite",
+        "description": "lite product description"
+      }
+    },
+    {
+      "name": "price_lite_month",
+      "path": "/v1/prices",
+      "method": "post",
+      "params": {
+        "product": "${prod_lite:id}",
+        "currency": "eur",
+        "billing_scheme": "per_unit",
+        "unit_amount": 499,
+        "recurring": {
+          "interval": "month",
+          "interval_count": 1
+        }
+      }
+    },
+    {
+      "name": "price_lite_year",
+      "path": "/v1/prices",
+      "method": "post",
+      "params": {
+        "product": "${prod_lite:id}",
+        "currency": "eur",
+        "billing_scheme": "per_unit",
+        "unit_amount": 4900,
+        "recurring": {
+          "interval": "year",
+          "interval_count": 1
+        }
+      }
+    },
+    {
+      "name": "prod_pro",
+      "path": "/v1/products",
+      "method": "post",
+      "params": {
+        "name": "Pro",
+        "description": "pro product description"
+      }
+    },
+    {
+      "name": "price_pro_month",
+      "path": "/v1/prices",
+      "method": "post",
+      "params": {
+        "product": "${prod_pro:id}",
+        "currency": "eur",
+        "billing_scheme": "per_unit",
+        "unit_amount": 900,
+        "recurring": {
+          "interval": "month",
+          "interval_count": 1
+        }
+      }
+    },
+    {
+      "name": "price_pro_year",
+      "path": "/v1/prices",
+      "method": "post",
+      "params": {
+        "product": "${prod_pro:id}",
+        "currency": "eur",
+        "billing_scheme": "per_unit",
+        "unit_amount": 9900,
+        "recurring": {
+          "interval": "year",
+          "interval_count": 1
+        }
+      }
+    },
+    {
+      "name": "prod_advanced",
+      "path": "/v1/products",
+      "method": "post",
+      "params": {
+        "name": "Advanced",
+        "description": "advanced product description"
+      }
+    },
+    {
+      "name": "price_advanced_month",
+      "path": "/v1/prices",
+      "method": "post",
+      "params": {
+        "product": "${prod_advanced:id}",
+        "currency": "eur",
+        "billing_scheme": "per_unit",
+        "unit_amount": 3900,
+        "recurring": {
+          "interval": "month",
+          "interval_count": 1
+        }
+      }
+    },
+    {
+      "name": "price_advanced_year",
+      "path": "/v1/prices",
+      "method": "post",
+      "params": {
+        "product": "${prod_advanced:id}",
+        "currency": "eur",
+        "billing_scheme": "per_unit",
+        "unit_amount": 43900,
+        "recurring": {
+          "interval": "year",
+          "interval_count": 1
+        }
+      }
+    }
+  ]
+}

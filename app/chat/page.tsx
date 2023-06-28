@@ -1,6 +1,7 @@
 import { getSession, getSubscription, getUserDetails } from '@/app/supabase-server';
 import { redirect } from 'next/navigation';
 import * as console from 'console';
+import * as process from 'process';
 
 export default async function Chat() {
   const [session, userDetails, subscription] = await Promise.all([
@@ -18,8 +19,8 @@ export default async function Chat() {
   let product : string = '';
 
   if (subscription && subscription.prices && subscription.prices.products && subscription.prices.products.active) {
-    if (subscription.prices.products.name) {
-      product = subscription.prices.products.name;
+    if (subscription.prices.products.id) {
+      product = subscription.prices.products.id;
     }
   }
 
@@ -35,9 +36,10 @@ export default async function Chat() {
                 width="100%"
                 height="100%"
                 src={
-                  product === 'Basic' ? process.env.LINK_IFRAME_BASIC_PRODUCT :
-                  product === 'Standard' ? process.env.LINK_IFRAME_STANDARD_PRODUCT :
-                  product === 'Premium' ? process.env.LINK_IFRAME_PREMIUM_PRODUCT : undefined
+                  product === process?.env?.NEXT_PUBLIC_ID_PRODUCT_LITE ? process?.env?.LINK_IFRAME_LITE_PRODUCT :
+                  product === process?.env?.NEXT_PUBLIC_ID_PRODUCT_PRO ? process?.env?.LINK_IFRAME_PRO_PRODUCT :
+                  product === process?.env?.NEXT_PUBLIC_ID_PRODUCT_ADVANCED ? process?.env?.LINK_IFRAME_ADVANCED_PRODUCT :
+                    undefined
                 }
         >
         </iframe>

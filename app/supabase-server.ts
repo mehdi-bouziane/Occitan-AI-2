@@ -53,7 +53,7 @@ export async function getSubscription() {
 
 export const getActiveProductsWithPrices = async () => {
   const supabase = createServerSupabaseClient();
-  const isProduction: boolean = process.env.IS_PRODUCTION === 'TRUE';
+  const isProduction: boolean = process?.env?.IS_PRODUCTION === 'TRUE';
   const { data, error } = await supabase
     .from('products')
     .select('*, prices(*)')

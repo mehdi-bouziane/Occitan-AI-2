@@ -19,8 +19,6 @@ export default async function Navbar() {
     getSubscription()
   ]);
 
-  console.log(subscription);
-
   return (
     <nav className={s.root}>
       <a href="#skip" className="sr-only focus:not-sr-only">

@@ -49,9 +49,9 @@ export default function Pricing({
     useState<BillingInterval>('month');
   const [priceIdLoading, setPriceIdLoading] = useState<string>();
 
-  const basicDescription = '- Uses chatgpt from openai \n- You can chat with your text files \n- You can chat with pdf';
-  const standardDescription = '- Uses chatgpt from openai \n- You can chat with your text files \n- You can chat with pdf \n- Generate unlimited images';
-  const premiumDescription = '- Uses chatgpt from openai\n' +
+  const liteDescription = '- Uses chatgpt from openai \n- You can chat with your text files \n- You can chat with pdf\n\n\n\n';
+  const proDescription = '- Uses chatgpt from openai \n- You can chat with your text files \n- You can chat with pdf \n- Generate unlimited images\n\n\n';
+  const advancedDescription = '- Uses chatgpt from openai\n' +
     '- You can chat with your text files\n' +
     '- You can chat with pdf\n' +
     '- Generate unlimited images\n' +
@@ -60,7 +60,7 @@ export default function Pricing({
 
   const handleCheckout = async (price: Price) => {
     setPriceIdLoading(price.id);
-    if (!user) {
+    if (!session || !user) {
       return router.push('/signin');
     }
     if (price.product_id === subscription?.prices?.products?.id) {
@@ -211,60 +211,73 @@ export default function Pricing({
         </div>
         <div className="mt-12 space-y-4 sm:mt-16 sm:space-y-0 sm:grid sm:grid-cols-2 sm:gap-6 lg:max-w-4xl lg:mx-auto xl:max-w-none xl:mx-0 xl:grid-cols-3">
           {products.map((product) => {
-            const price = product?.prices?.find(
-              (price) => price.interval === billingInterval
-            );
-            if (!price) return null;
-            const priceString = new Intl.NumberFormat('en-US', {
-              style: 'currency',
-              currency: price.currency!,
-              minimumFractionDigits: 0
-            }).format((price?.unit_amount || 0) / 100);
-            return (
-              <div
-                key={product.id}
-                className={cn(
-                  'rounded-lg shadow-sm divide-y divide-zinc-600 bg-zinc-900',
-                  {
-                    'border border-pink-500': subscription
-                      ? product.name === subscription?.prices?.products?.name
-                      : product.name === 'Freelancer'
-                  }
-                )}
-              >
-                <div className="p-6">
-                  <h2 className="text-2xl font-semibold leading-6 text-white">
-                    {product.name === 'Basic' ? 'Freelancer' + ' - 7 days free' : product.name + ' (Available soon)'}
-                  </h2>
-                  <p className="mt-4 text-zinc-300" style={{whiteSpace: 'pre-line'}}>{product.name === 'Basic' ? basicDescription :
-                                                     product.name === 'Standard' ? standardDescription :
-                                                     product.name === 'Premium' ?premiumDescription : undefined}</p>
-                  <p className="mt-8">
-                    <span className="text-5xl font-extrabold white">
-                      {priceString}
-                    </span>
-                    <span className="text-base font-medium text-zinc-100">
-                      /{billingInterval}
-                    </span>
-                  </p>
-                  {product.name === 'Basic' && (
-                    <Button
-                      variant="slim"
-                      type="button"
-                      disabled={!session}
-                      loading={priceIdLoading === price.id}
-                      onClick={() => handleCheckout(price)}
-                      className="block w-full py-2 mt-8 text-sm font-semibold text-center text-white rounded-md hover:bg-zinc-900"
-                    >
-                      {product.name === subscription?.prices?.products?.name
-                        ? 'Manage'
-                        : 'Subscribe'}
-                    </Button>
+            if ([process.env.NEXT_PUBLIC_ID_PRODUCT_LITE, process.env.NEXT_PUBLIC_ID_PRODUCT_PRO, process.env.NEXT_PUBLIC_ID_PRODUCT_ADVANCED].includes(product?.id)) {
+              const price = product?.prices?.find(
+                (price) => price.interval === billingInterval
+              );
+              if (!price) return null;
+              const priceString = new Intl.NumberFormat('fr-FR', {
+                style: 'currency',
+                currency: price.currency!,
+                minimumFractionDigits: 0
+              }).format((price?.unit_amount || 0) / 100);
+              return (
+                <div
+                  key={product.id}
+                  className={cn(
+                    'rounded-lg shadow-sm divide-y divide-zinc-600 bg-zinc-900',
+                    {
+                      'border border-pink-500': subscription
+                        ? product.name === subscription?.prices?.products?.name
+                        : product.name === 'Freelancer'
+                    }
                   )}
+                >
+                  <div className="p-6">
+                    <h2 className="text-2xl font-semibold leading-6 text-white">
+                      {product.id === process.env.NEXT_PUBLIC_ID_PRODUCT_LITE ? product.name + ' - 7 days free' : product.name + ' (Available soon)'}
+                    </h2>
+                    <p className="mt-4 text-zinc-300" style={{whiteSpace: 'pre-line'}}>{product.id === process.env.NEXT_PUBLIC_ID_PRODUCT_LITE ? liteDescription :
+                                                       product.id ===  process.env.NEXT_PUBLIC_ID_PRODUCT_PRO ? proDescription :
+                                                       product.id ===  process.env.NEXT_PUBLIC_ID_PRODUCT_ADVANCED ? advancedDescription : undefined}</p>
+                    <p className="mt-8">
+                      <span className="text-5xl font-extrabold white">
+                        {priceString}
+                      </span>
+                      <span className="text-base font-medium text-zinc-100">
+                        /{billingInterval}
+                      </span>
+                    </p>
+                    {product.id === process.env.NEXT_PUBLIC_ID_PRODUCT_LITE ? (
+                      <Button
+                        variant="slim"
+                        type="button"
+                        disabled={false}
+                        loading={priceIdLoading === price.id}
+                        onClick={() => handleCheckout(price)}
+                        className="block w-full py-2 mt-8 text-sm font-semibold text-center text-white rounded-md hover:bg-zinc-900"
+                      >
+                        {product.name === subscription?.prices?.products?.name
+                          ? 'Manage'
+                          : 'Subscribe'}
+                      </Button>
+                    ) : (
+                      <Button
+                        variant="slim"
+                        type="button"
+                        disabled={true}
+                        loading={priceIdLoading === price.id}
+                        onClick={() => handleCheckout(price)}
+                        className="block w-full py-2 mt-8 text-sm font-semibold text-center text-white rounded-md hover:bg-zinc-900"
+                      >
+                        {'Available soon'}
+                      </Button>
+                    )}
+                  </div>
                 </div>
-              </div>
-            );
-          })}
+              );
+          }})
+          }
         </div>
         <LogoCloud />
       </div>
