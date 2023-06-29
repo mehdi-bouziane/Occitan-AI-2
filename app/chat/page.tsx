@@ -1,7 +1,10 @@
+import axios from 'axios';
 import { getSession, getSubscription, getUserDetails } from '@/app/supabase-server';
 import { redirect } from 'next/navigation';
 import * as console from 'console';
 import * as process from 'process';
+import https from 'https';
+import fs from 'fs';
 
 export default async function Chat() {
   const [session, userDetails, subscription] = await Promise.all([
@@ -28,27 +31,31 @@ export default async function Chat() {
     return redirect('/');
   }
 
-  const urlChat = product === process?.env?.NEXT_PUBLIC_ID_PRODUCT_LITE ? process?.env?.LINK_IFRAME_LITE_PRODUCT:
-    product === process?.env?.NEXT_PUBLIC_ID_PRODUCT_PRO ? process?.env?.LINK_IFRAME_PRO_PRODUCT:
-      product === process?.env?.NEXT_PUBLIC_ID_PRODUCT_ADVANCED ? process?.env?.LINK_IFRAME_ADVANCED_PRODUCT:
-        undefined
+  let body = new FormData();
+  let token = '';
+  body.append("username", String(process?.env?.AUTH_CHAINLIT_SERVER_USER));
+  body.append("password", String(process?.env?.AUTH_CHAINLIT_SERVER_PASSWORD));
 
-  //call server python
-  const body = new FormData();
-  let token :string = '';
-  body.set("username", String(process?.env?.AUTH_CHAINLIT_SERVER_USER));
-  body.set("password", String(process?.env?.AUTH_CHAINLIT_SERVER_PASSWORD));
+// Chargez votre certificat à partir du système de fichiers.
+  const cert = fs.readFileSync('./././certificate/certificate.crt');
+
+// Créez un agent HTTPS avec votre certificat.
+  const agent = new https.Agent({
+    ca: cert,
+    rejectUnauthorized: false
+  });
+
+  const urlChat = process?.env?.LINK_IFRAME_LITE_PRODUCT;
+
   try {
-    const res = await fetch(urlChat + `/token`, {
-      method: "POST",
-        body,
+    const res = await axios.post(urlChat + `/token`, body, {
+      httpsAgent: agent
     });
-    const data = await res.json();
-    token = data.access_token;
+
+    token = res.data.access_token;
     console.log(token);
   } catch (err) {
     console.log(err);
-    return redirect('/');
   }
 
   return (
