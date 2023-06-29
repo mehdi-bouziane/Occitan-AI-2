@@ -4,7 +4,6 @@ import { redirect } from 'next/navigation';
 import * as console from 'console';
 import * as process from 'process';
 import https from 'https';
-import fs from 'fs';
 
 export default async function Chat() {
   const [session, userDetails, subscription] = await Promise.all([
@@ -36,12 +35,8 @@ export default async function Chat() {
   body.append("username", String(process?.env?.AUTH_CHAINLIT_SERVER_USER));
   body.append("password", String(process?.env?.AUTH_CHAINLIT_SERVER_PASSWORD));
 
-// Chargez votre certificat à partir du système de fichiers.
-  const cert = fs.readFileSync('./././certificate/certificate.crt');
-
 // Créez un agent HTTPS avec votre certificat.
   const agent = new https.Agent({
-    ca: cert,
     rejectUnauthorized: false
   });
 
@@ -53,7 +48,6 @@ export default async function Chat() {
     });
 
     token = res.data.access_token;
-    console.log(token);
   } catch (err) {
     console.log(err);
   }
