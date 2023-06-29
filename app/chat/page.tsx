@@ -24,13 +24,22 @@ export default async function Chat() {
     }
   }
 
+  if (product === '') {
+    return redirect('/');
+  }
+
+  const urlChat = product === process?.env?.NEXT_PUBLIC_ID_PRODUCT_LITE ? process?.env?.LINK_IFRAME_LITE_PRODUCT:
+    product === process?.env?.NEXT_PUBLIC_ID_PRODUCT_PRO ? process?.env?.LINK_IFRAME_PRO_PRODUCT:
+      product === process?.env?.NEXT_PUBLIC_ID_PRODUCT_ADVANCED ? process?.env?.LINK_IFRAME_ADVANCED_PRODUCT:
+        undefined
+
   //call server python
   const body = new FormData();
   let token :string = '';
-  body.set("username", "bea36a5ce64599ffe14b35795c02749be92e1f8b");
-  body.set("password", "a985317b41ce97c35a9d8a0dd72cf1cd");
+  body.set("username", String(process?.env?.AUTH_CHAINLIT_SERVER_USER));
+  body.set("password", String(process?.env?.AUTH_CHAINLIT_SERVER_PASSWORD));
   try {
-    const res = await fetch(`http://localhost:8000/token`, {
+    const res = await fetch(urlChat + `/token`, {
       method: "POST",
         body,
     });
@@ -42,10 +51,6 @@ export default async function Chat() {
     return redirect('/');
   }
 
-  if (product === '') {
-    return redirect('/');
-  }
-
   return (
     <>
     <section style={{ height: '92vh' }} className="mb-32 bg-black">
@@ -54,10 +59,7 @@ export default async function Chat() {
                 width="100%"
                 height="100%"
                 src={
-                  product === process?.env?.NEXT_PUBLIC_ID_PRODUCT_LITE ? process?.env?.LINK_IFRAME_LITE_PRODUCT + '?token=' + token:
-                  product === process?.env?.NEXT_PUBLIC_ID_PRODUCT_PRO ? process?.env?.LINK_IFRAME_PRO_PRODUCT + token:
-                  product === process?.env?.NEXT_PUBLIC_ID_PRODUCT_ADVANCED ? process?.env?.LINK_IFRAME_ADVANCED_PRODUCT + token:
-                    undefined
+                  urlChat + '?token=' + token
                 }
         >
         </iframe>
