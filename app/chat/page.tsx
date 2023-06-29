@@ -24,6 +24,24 @@ export default async function Chat() {
     }
   }
 
+  //call server python
+  const body = new FormData();
+  let token :string = '';
+  body.set("username", "bea36a5ce64599ffe14b35795c02749be92e1f8b");
+  body.set("password", "a985317b41ce97c35a9d8a0dd72cf1cd");
+  try {
+    const res = await fetch(`http://localhost:8000/token`, {
+      method: "POST",
+        body,
+    });
+    const data = await res.json();
+    token = data.access_token;
+    console.log(token);
+  } catch (err) {
+    console.log(err);
+    return redirect('/');
+  }
+
   if (product === '') {
     return redirect('/');
   }
@@ -36,9 +54,9 @@ export default async function Chat() {
                 width="100%"
                 height="100%"
                 src={
-                  product === process?.env?.NEXT_PUBLIC_ID_PRODUCT_LITE ? process?.env?.LINK_IFRAME_LITE_PRODUCT :
-                  product === process?.env?.NEXT_PUBLIC_ID_PRODUCT_PRO ? process?.env?.LINK_IFRAME_PRO_PRODUCT :
-                  product === process?.env?.NEXT_PUBLIC_ID_PRODUCT_ADVANCED ? process?.env?.LINK_IFRAME_ADVANCED_PRODUCT :
+                  product === process?.env?.NEXT_PUBLIC_ID_PRODUCT_LITE ? process?.env?.LINK_IFRAME_LITE_PRODUCT + '?token=' + token:
+                  product === process?.env?.NEXT_PUBLIC_ID_PRODUCT_PRO ? process?.env?.LINK_IFRAME_PRO_PRODUCT + token:
+                  product === process?.env?.NEXT_PUBLIC_ID_PRODUCT_ADVANCED ? process?.env?.LINK_IFRAME_ADVANCED_PRODUCT + token:
                     undefined
                 }
         >
